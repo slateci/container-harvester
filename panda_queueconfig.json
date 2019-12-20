@@ -1,0 +1,49 @@
+{
+"UCHICAGO_RIVER": {
+	       "prodSourceLabel":"managed",
+	       "nQueueLimitJob":0,
+	       "nQueueLimitWorker":2,
+	       "maxWorkers":8,	
+	       "mapType":"OneToOne",
+	       "maxSubmissionAttempts":3,
+	"preparator":{
+			"name":"RseDirectPreparator",
+			"module":"pandaharvester.harvesterpreparator.rse_direct_preparator",
+			"basePath":"/opt/harvester/rucio"
+			},
+	"submitter":{
+			"name":"HTCondorSubmitter",
+			"module":"pandaharvester.harvestersubmitter.htcondor_submitter",
+			"templateFile":"/opt/harvester/htcondor_grid_submit_p1.sdf",
+                        "logDir": "/var/log/panda",
+			"nCorePerNode": 24,
+			"nCore": 24,
+                        "logBaseURL": "https://aipanda011.cern.ch:25443/cache/",
+                        "x509UserProxy": "/tmp/x509up_u13214",
+                        "ceHostname": "harvester.mwt2.org",
+                        "ceEndpoint": "harvester.mwt2.org:9619"
+			},
+	"workerMaker":{
+			"name":"SimpleWorkerMaker",
+			"module":"pandaharvester.harvesterworkermaker.simple_worker_maker"
+			},
+	"messenger":{
+			"name":"SharedFileMessenger",
+			"module":"pandaharvester.harvestermessenger.shared_file_messenger",
+			"accessPoint":"/opt/harvester/messenger/${workerID}"
+			},
+	"stager":{
+			"name":"DummyStager",
+			"module":"pandaharvester.harvesterstager.dummy_stager",
+			"srcBasePath":"/opt/harvester/rucio"
+			},
+	"monitor":{
+			"name":"HTCondorMonitor",
+			"module":"pandaharvester.harvestermonitor.htcondor_monitor"
+			},
+	"sweeper":{
+			"name":"HTCondorSweeper",
+			"module":"pandaharvester.harvestersweeper.htcondor_sweeper"
+			}
+	}
+}
