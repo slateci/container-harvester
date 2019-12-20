@@ -10,11 +10,10 @@ RUN yum install -y python-devel python-setuptools python-pip git gcc voms-client
 # Create directories needed 
 RUN mkdir -p /var/log/panda
 
-# Create a Harvester user and then drop privileges
+# Create a Harvester user 
 RUN adduser harvester
 RUN chown harvester: /opt 
 RUN chown harvester: /var/log/panda
-USER harvester
 
 # Create the VirtualEnv
 RUN cd /opt && virtualenv harvester && cd harvester && source bin/activate && \
@@ -39,4 +38,18 @@ COPY CERN-bundle-3.pem etc/pki/tls/certs/CERN-bundle-3.pem
 ENV PANDA_HOME=/opt/harvester
 ENV PYTHONPATH=/opt/harvester/lib/python2.7/site-packages/pandacommon:/opt/harvester/lib/python2.7/site-packages
 
+# If we need to drop privileges, we need to copy in the cert at build time and
+# chown it
+#
+#COPY usathpc-usercert-2019.pem /opt/harvester/etc/panda/usathpc-usercert-2019.pem
+#COPY usathpc-userkey-2019.pem /opt/harvester/etc/panda/usathpc-userkey-2019.pem
+#
+#RUN chown harvester: /opt/harvester/etc/panda/usathpc-usercert-2019.pem
+#RUN chown harvester: /opt/harvester/etc/panda/usathpc-userkey-2019.pem
+#
+#
+#USER harvester
+
 CMD "/bin/env"
+COPY start-harvester.sh start-harvester.sh
+#ENTRYPOINT ./start-harvester.sh
