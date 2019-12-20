@@ -33,26 +33,10 @@ COPY panda_common.cfg etc/panda/panda_common.cfg
 COPY panda_harvester.cfg etc/panda/panda_harvester.cfg
 COPY panda_queueconfig.json etc/panda/panda_queueconfig.json
 
+# CERN CA Bundle
+COPY CERN-bundle-3.pem etc/pki/tls/certs/CERN-bundle-3.pem
+
 ENV PANDA_HOME=/opt/harvester
 ENV PYTHONPATH=/opt/harvester/lib/python2.7/site-packages/pandacommon:/opt/harvester/lib/python2.7/site-packages
 
 CMD "/bin/env"
-
-#sudo mkdir -p /var/log/panda
-#sudo chown -R usatlas1 /var/log/panda
-#sudo chgrp -R mwt2 /var/log/panda
-#
-#cvmfs_config setup
-#### Create /etc/cvmfs/default.local:
-## CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
-## CVMFS_HTTP_PROXY=DIRECT
-#cvmfs_config probe
-#
-## Setup the repository
-## Import the signing key
-#wget https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
-#sudo rpm --import RPM-GPG-KEY-HTCondor
-## Get the repository file
-#cd /etc/yum.repos.d
-#sudo wget https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel7.repo
-## NOTE: if you have the EPEL repository enabled, add exclude=condor* to the EPEL repo file
