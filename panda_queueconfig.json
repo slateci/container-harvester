@@ -1,7 +1,7 @@
 {
 "UCHICAGO_RIVER": {
 	       "prodSourceLabel":"managed",
-	       "nQueueLimitJob":0,
+	       "nQueueLimitJob":1,
 	       "nQueueLimitWorker":2,
 	       "maxWorkers":8,	
 	       "mapType":"OneToOne",
@@ -9,7 +9,7 @@
 	"preparator":{
 			"name":"RseDirectPreparator",
 			"module":"pandaharvester.harvesterpreparator.rse_direct_preparator",
-			"basePath":"/opt/harvester/rucio"
+			"basePath":"/opt/harvester"
 			},
 	"submitter":{
 			"name":"HTCondorSubmitter",
@@ -30,12 +30,12 @@
 	"messenger":{
 			"name":"SharedFileMessenger",
 			"module":"pandaharvester.harvestermessenger.shared_file_messenger",
-			"accessPoint":"/opt/harvester/messenger/${workerID}"
+			"accessPoint":"/opt/harvester/${workerID}"
 			},
 	"stager":{
 			"name":"DummyStager",
 			"module":"pandaharvester.harvesterstager.dummy_stager",
-			"srcBasePath":"/opt/harvester/rucio"
+			"srcBasePath":"/opt/harvester"
 			},
 	"monitor":{
 			"name":"HTCondorMonitor",
