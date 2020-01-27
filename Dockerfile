@@ -39,6 +39,7 @@ COPY htcondor_grid_submit_p1.sdf htcondor_grid_submit_p1.sdf
 COPY runpilot3-wrapper.sh runpilot3-wrapper.sh
 COPY usathpc-robot-gridproxy etc/panda/usathpc-robot-gridproxy
 COPY usathpc-robot-vomsproxy etc/panda/usathpc-robot-vomsproxy
+COPY config /home/harvester/.kube/config
 
 # CERN CA Bundle
 COPY CERN-bundle-3.pem etc/pki/tls/certs/CERN-bundle-3.pem
@@ -56,7 +57,7 @@ RUN chown harvester: /opt/harvester/etc/panda/usathpc-usercert-2019.pem
 RUN chown harvester: /opt/harvester/etc/panda/usathpc-userkey-2019.pem
 
 
-#USER harvester
+USER harvester
 
 CMD "/bin/env"
 COPY start-harvester.sh start-harvester.sh
