@@ -7,6 +7,10 @@ RUN yum install epel-release -y
 # Python dependencies, build tools
 RUN yum install -y python-devel python-setuptools python-pip git gcc voms-clients-cpp python-virtualenv
 
+# Install and set up kubectl
+COPY kubernetes.repo /etc/yum.repos.d/kubernetes.repo
+RUN yum install -y kubectl
+
 # Create directories needed 
 RUN mkdir -p /var/log/panda
 
