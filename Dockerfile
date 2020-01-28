@@ -13,6 +13,7 @@ RUN yum install -y kubectl
 
 # Create directories needed 
 RUN mkdir -p /var/log/panda
+RUN mkdir -p /data/atlpan/harvester_wdris
 
 # Create a Harvester user 
 RUN adduser harvester
@@ -23,7 +24,8 @@ RUN chown harvester: /var/log/panda
 RUN cd /opt && virtualenv harvester && cd harvester && source bin/activate && \
     pip install pip --upgrade && \
     pip install --upgrade setuptools>=39.0.1 && \
-    pip install git+git://github.com/PanDAWMS/panda-harvester.git
+    pip install git+git://github.com/HSF/harvester.git@k8s_analysis && \
+    pip install kubernetes
 
 # Copy Harvester templates into place
 WORKDIR /opt/harvester
@@ -37,9 +39,12 @@ COPY panda_harvester.cfg etc/panda/panda_harvester.cfg
 COPY panda_queueconfig.json etc/panda/panda_queueconfig.json
 COPY htcondor_grid_submit_p1.sdf htcondor_grid_submit_p1.sdf
 COPY runpilot3-wrapper.sh runpilot3-wrapper.sh
+COPY x509up_u13214 /tmp/x509up_u13214
 COPY usathpc-robot-gridproxy etc/panda/usathpc-robot-gridproxy
 COPY usathpc-robot-vomsproxy etc/panda/usathpc-robot-vomsproxy
 COPY config /home/harvester/.kube/config
+COPY atlas_job.yaml atlas_job.yaml
+COPY k8s_secret_cred_manager_config.json k8s_secret_cred_manager_config.json
 
 # CERN CA Bundle
 COPY CERN-bundle-3.pem etc/pki/tls/certs/CERN-bundle-3.pem
@@ -55,7 +60,7 @@ COPY usathpc-userkey-2019.pem /opt/harvester/etc/panda/usathpc-userkey-2019.pem
 
 RUN chown harvester: /opt/harvester/etc/panda/usathpc-usercert-2019.pem
 RUN chown harvester: /opt/harvester/etc/panda/usathpc-userkey-2019.pem
-
+RUN chown -R harvester: /opt/harvester
 
 USER harvester
 

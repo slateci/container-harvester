@@ -1,49 +1,48 @@
-{
 "UCHICAGO_RIVER": {
-	       "prodSourceLabel":"managed",
-	       "nQueueLimitJob":1,
-	       "nQueueLimitWorker":2,
-	       "maxWorkers":8,	
-	       "mapType":"OneToOne",
-	       "maxSubmissionAttempts":3,
-	"preparator":{
-			"name":"RseDirectPreparator",
-			"module":"pandaharvester.harvesterpreparator.rse_direct_preparator",
-			"basePath":"/opt/harvester"
-			},
-	"submitter":{
-			"name":"HTCondorSubmitter",
-			"module":"pandaharvester.harvestersubmitter.htcondor_submitter",
-			"templateFile":"/opt/harvester/htcondor_grid_submit_p1.sdf",
-                        "logDir": "/var/log/panda",
-			"nCorePerNode": 24,
-			"nCore": 24,
-                        "logBaseURL": "https://aipanda011.cern.ch:25443/cache/",
-                        "x509UserProxy": "/tmp/x509up_u13214",
-                        "ceHostname": "harvester.mwt2.org",
-                        "ceEndpoint": "harvester.mwt2.org:9619"
-			},
-	"workerMaker":{
-			"name":"SimpleWorkerMaker",
-			"module":"pandaharvester.harvesterworkermaker.simple_worker_maker"
-			},
-	"messenger":{
-			"name":"SharedFileMessenger",
-			"module":"pandaharvester.harvestermessenger.shared_file_messenger",
-			"accessPoint":"/opt/harvester/${workerID}"
-			},
-	"stager":{
-			"name":"DummyStager",
-			"module":"pandaharvester.harvesterstager.dummy_stager",
-			"srcBasePath":"/opt/harvester"
-			},
-	"monitor":{
-			"name":"HTCondorMonitor",
-			"module":"pandaharvester.harvestermonitor.htcondor_monitor"
-			},
-	"sweeper":{
-			"name":"HTCondorSweeper",
-			"module":"pandaharvester.harvestersweeper.htcondor_sweeper"
-			}
-	}
-}
+                    "queueStatus": "online",
+                    "prodSourceLabel": "managed",
+                    "nQueueLimitWorker": 100,
+                    "maxWorkers": 1000,
+                    "maxNewWorkersPerCycle": 30,
+                    "runMode":"slave",
+                    "mapType": "NoJob",
+                    "truePilot": true,
+                    "preparator": {
+			                        "name": "DummyPreparator",
+			                        "module": "pandaharvester.harvesterpreparator.dummy_preparator"
+			                },
+                    "submitter": {
+			                        "name":"K8sSubmitter",
+			                        "module":"pandaharvester.harvestersubmitter.k8s_submitter",
+			                        "proxySecretPath":"/proxy/atlas.prod.proxy",
+			                        "x509UserProxy": "/tmp/x509up_u13214",
+			                        "cpuAdjustRatio": 100,
+			                        "memoryAdjustRatio": 100
+			                },
+                    "workerMaker": {
+			                        "name": "SimpleWorkerMaker",
+			                        "module": "pandaharvester.harvesterworkermaker.simple_worker_maker"
+			                },
+                    "messenger": {
+			                        "name": "SharedFileMessenger",
+			                        "module": "pandaharvester.harvestermessenger.shared_file_messenger",
+			                        "accessPoint": "/data/atlpan/harvester_wdirs/${harvesterID}/${_workerID_3.2}/${_workerID_1.0}/${workerID}"
+			                },
+                    "stager": {
+			                        "name": "DummyStager",
+			                        "module": "pandaharvester.harvesterstager.dummy_stager"
+			                },
+                    "monitor": {
+			                        "name":"K8sMonitor",
+			                        "module":"pandaharvester.harvestermonitor.k8s_monitor"
+			                },
+                    "sweeper": {
+			                        "name": "K8sSweeper",
+			                        "module": "pandaharvester.harvestersweeper.k8s_sweeper"
+			                },
+                    "common": {
+			                       "k8s_yaml_file": "/opt/harvester/k8s_atlas_job.yaml",
+			                       "k8s_config_file": "/home/harvester/.kube/config",
+			                       "k8s_namespace": "servicex"
+			                }
+        }
