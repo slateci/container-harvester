@@ -13,12 +13,13 @@ RUN yum install -y kubectl
 
 # Create directories needed 
 RUN mkdir -p /var/log/panda
-RUN mkdir -p /data/atlpan/harvester_wdris
+RUN mkdir -p /data/atlpan/harvester_wdirs
 
 # Create a Harvester user 
 RUN adduser harvester
 RUN chown harvester: /opt 
 RUN chown harvester: /var/log/panda
+RUN chown -R harvester: /data/atlpan
 
 # Create the VirtualEnv
 RUN cd /opt && virtualenv harvester && cd harvester && source bin/activate && \
@@ -36,7 +37,6 @@ RUN mv etc/sysconfig/panda_harvester.rpmnew.template  etc/sysconfig/panda_harves
 
 COPY panda_common.cfg etc/panda/panda_common.cfg
 COPY panda_harvester.cfg etc/panda/panda_harvester.cfg
-COPY panda_queueconfig.json etc/panda/panda_queueconfig.json
 COPY htcondor_grid_submit_p1.sdf htcondor_grid_submit_p1.sdf
 COPY runpilot3-wrapper.sh runpilot3-wrapper.sh
 COPY x509up_u13214 /tmp/x509up_u13214
@@ -66,4 +66,5 @@ USER harvester
 
 CMD "/bin/env"
 COPY start-harvester.sh start-harvester.sh
+COPY panda_queueconfig.json etc/panda/panda_queueconfig.json
 #ENTRYPOINT ./start-harvester.sh
