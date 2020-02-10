@@ -5,7 +5,7 @@ LABEL maintainer="lincolnb@uchicago.edu"
 RUN yum install epel-release -y
 
 # Python dependencies, build tools
-RUN yum install -y python-devel python-setuptools python-pip git gcc voms-clients-cpp python-virtualenv
+RUN yum install -y python-devel python-setuptools python-pip git gcc voms-clients-cpp python-virtualenv emacs
 
 # Install and set up kubectl
 COPY kubernetes.repo /etc/yum.repos.d/kubernetes.repo
@@ -39,10 +39,6 @@ COPY panda_common.cfg etc/panda/panda_common.cfg
 COPY panda_harvester.cfg etc/panda/panda_harvester.cfg
 COPY htcondor_grid_submit_p1.sdf htcondor_grid_submit_p1.sdf
 COPY runpilot3-wrapper.sh runpilot3-wrapper.sh
-COPY x509up_u13214 /tmp/x509up_u13214
-COPY usathpc-robot-gridproxy etc/panda/usathpc-robot-gridproxy
-COPY usathpc-robot-vomsproxy etc/panda/usathpc-robot-vomsproxy
-COPY config /home/harvester/.kube/config
 COPY atlas_job.yaml atlas_job.yaml
 COPY k8s_secret_cred_manager_config.json k8s_secret_cred_manager_config.json
 
@@ -55,16 +51,12 @@ ENV PYTHONPATH=/opt/harvester/lib/python2.7/site-packages/pandacommon:/opt/harve
 # If we need to drop privileges, we need to copy in the cert at build time and
 # chown it
 
-COPY usathpc-usercert-2019.pem /opt/harvester/etc/panda/usathpc-usercert-2019.pem
-COPY usathpc-userkey-2019.pem /opt/harvester/etc/panda/usathpc-userkey-2019.pem
+COPY panda_queueconfig.json /opt/harvester/etc/panda/panda_queueconfig.json
 
-RUN chown harvester: /opt/harvester/etc/panda/usathpc-usercert-2019.pem
-RUN chown harvester: /opt/harvester/etc/panda/usathpc-userkey-2019.pem
 RUN chown -R harvester: /opt/harvester
 
 USER harvester
 
 CMD "/bin/env"
 COPY start-harvester.sh start-harvester.sh
-COPY panda_queueconfig.json etc/panda/panda_queueconfig.json
 #ENTRYPOINT ./start-harvester.sh

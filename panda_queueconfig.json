@@ -16,8 +16,7 @@
         "submitter": {
             "name":"K8sSubmitter",
             "module":"pandaharvester.harvestersubmitter.k8s_submitter",
-            "proxySecretPath":"/proxy/atlas.prod.proxy",
-            "x509UserProxy": "/tmp/x509up_u13214",
+            "proxySecretPath":"/opt/harvester/etc/panda/usathpc-robot-vomsproxy",
             "cpuAdjustRatio": 100,
             "memoryAdjustRatio": 100
         },
