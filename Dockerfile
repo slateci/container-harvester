@@ -25,7 +25,7 @@ RUN chown -R harvester: /data/atlpan
 RUN cd /opt && virtualenv harvester && cd harvester && source bin/activate && \
     pip install pip --upgrade && \
     pip install --upgrade setuptools>=39.0.1 && \
-    pip install git+git://github.com/HSF/harvester.git@k8s_analysis && \
+    pip install git+git://github.com/HSF/harvester.git && \
     pip install kubernetes
 
 # Copy Harvester templates into place
